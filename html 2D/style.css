@@ -1,0 +1,7 @@
+body {
+    margin: 0;
+}
+
+canvas {
+    background: linear-gradient(#6e0072, #181336);
+}
