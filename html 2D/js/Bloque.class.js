@@ -1,6 +1,6 @@
 /**
  * Clase que representa un bloque
- * @class
+ * @class Bloque
  */
 export default class Bloque {
     /**
@@ -9,9 +9,9 @@ export default class Bloque {
      * @param {number} y - Posición en y
      * @param {number} w - Ancho
      * @param {number} h - Alto
-     * @param {number} t - Tipo
+     * @param {(string|HTMLImageElement)} [colorOrImage] - El color o la imagen del bloque.
      */
-    constructor(x, y, w, h, t) {
+    constructor(x, y, w, h, colorOrImage) {
         /**
          * Propiedad que almacena la posición en x
          * @type {number}
@@ -33,24 +33,34 @@ export default class Bloque {
          */
         this.h = h;
         /**
-         * Propiedad que almacena el tipo
-         * @type {number}
+         * El color o la imagen del bloque.
+         * @type {(string|HTMLImageElement)}}
          */
-        this.t = t;
-        /**
-         * Propiedad que almacena un arreglo
-         * @type {Array}
-         */
-        this.content = [];
+        this.colorOrImage = colorOrImage;
+    }
+    
+    /**
+     * Dibuja el bloque en el canvas.
+     * 
+     * @param {CanvasRenderingContext2D} ctx - Contexto del canvas
+     * @memberof Block
+     */
+    draw(ctx) {
+        if (typeof this.colorOrImage === "string") {
+            ctx.fillStyle = this.colorOrImage;
+            ctx.fillRect(this.x, this.y, this.width, this.height);
+        } else if (this.colorOrImage instanceof HTMLImageElement) {
+            ctx.drawImage(this.colorOrImage, this.x, this.y, this.width, this.height);
+        }
     }
 
     /**
-     * Método para determinar si un punto toca un bloque
+     * Método para determinar si un objeto coliciona con un bloque
      * @param {number} x - Posición en x del punto
      * @param {number} y - Posición en y del punto
-     * @returns {boolean} - Verdadero si el punto toca el bloque, falso en caso contrario
+     * @returns {boolean} - Verdadero si el objeto coliciona con el bloque, falso en caso contrario
      */
-    isTouched(x, y) {
+    isCollidingWith(x, y) {
         return (x < this.x || x > this.x + this.w || y < this.y || y > this.y + this.w) ? false : true
     }
 }

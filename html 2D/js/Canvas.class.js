@@ -1,6 +1,6 @@
 /**
  * Clase para crear un canvas y controlar su tamaño
- * @class
+ * @class Canvas
  */
 export default class Canvas {
     /**

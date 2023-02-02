@@ -1,10 +1,11 @@
 /**
  * Clase que se encarga de calcular y mostrar los FPS (fotogramas por segundo) en un juego o aplicación en tiempo real.
- * @class
+ * @class FPSCounter
  */
 export default class FPSCounter {
   /**
    * Crea una nueva instancia de FPSCounter.
+   * @constructor
    */
   constructor() {
     /**
@@ -28,6 +29,7 @@ export default class FPSCounter {
 
   /**
    * Calcula los FPS y actualiza el valor de "fps".
+   * @method
    * @returns {number} - Los FPS actuales.
    */
   calculateFPS() {
@@ -43,6 +45,7 @@ export default class FPSCounter {
 
   /**
    * Dibuja los FPS en el contexto de canvas especificado.
+   * @method
    * @param {CanvasRenderingContext2D} ctx - El contexto de canvas en el que se dibujarán los FPS.
    * @param {number} [x=10] - La posición horizontal en pixels desde el borde izquierdo del canvas en el que se dibujarán los FPS.
    * @param {number} [y=20] - La posición vertical en pixels desde el borde superior del canvas en el que se dibujarán los FPS.

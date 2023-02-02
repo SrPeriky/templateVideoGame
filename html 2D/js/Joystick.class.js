@@ -1,6 +1,6 @@
 /**
  * Clase que permite crear y controlar un joystick virtual en un canvas para su uso en juegos móviles.
- * @class
+ * @class Joystick
  *  
  * @property {number} x - Posición en el eje x del centro del joystick.
  * @property {number} y - Posición en el eje y del centro del joystick.
