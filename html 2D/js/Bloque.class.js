@@ -48,9 +48,9 @@ export default class Bloque {
     draw(ctx) {
         if (typeof this.colorOrImage === "string") {
             ctx.fillStyle = this.colorOrImage;
-            ctx.fillRect(this.x, this.y, this.width, this.height);
+            ctx.fillRect(this.x, this.y, this.w, this.h);
         } else if (this.colorOrImage instanceof HTMLImageElement) {
-            ctx.drawImage(this.colorOrImage, this.x, this.y, this.width, this.height);
+            ctx.drawImage(this.colorOrImage, this.x, this.y, this.w, this.h);
         }
     }
 

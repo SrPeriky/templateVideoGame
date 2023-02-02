@@ -3,7 +3,7 @@
  *
  * @class Keyboard
  */
-class Keyboard {
+export default class Keyboard {
     /**
      * Crea una instancia de Keyboard.
      *
@@ -36,6 +36,7 @@ class Keyboard {
        * @memberof Keyboard
        */
       window.addEventListener("keyup", (e) => {
+        this.keyState = {}
         this.keyState[e.keyCode] = false;
       });
     }
