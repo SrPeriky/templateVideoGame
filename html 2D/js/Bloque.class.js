@@ -63,4 +63,19 @@ export default class Bloque {
     isCollidingWith(x, y) {
         return (x < this.x || x > this.x + this.w || y < this.y || y > this.y + this.w) ? false : true
     }
+
+     /**
+     * Mueve el objeto Circle en la dirección apuntada por el joystick
+     * @method
+     * 
+     * @memberof Bloque
+     * @param {Joystick} joystick - El objeto Joystick que controla el movimiento
+     * @param {string} direction - La dirección en la que el objeto se moverá. Puede ser "horizontal", "vertical" o false (para ambas direcciones).
+     */
+     move(joystick, speed) {
+        if (joystick.isPressed) {
+            this.x -= Math.cos(joystick.angle) * speed;
+            this.y -= Math.sin(joystick.angle) * speed;
+        }
+    }
 }
