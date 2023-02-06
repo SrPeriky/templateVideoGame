@@ -6,6 +6,7 @@ import Bloque from './js/Bloque.class.js'
 import ClosestPoint from './js/ClosestPoint.class.js'
 import Keyboard from './js/Keyboard.class.js'
 import DrawLine from './js/DrawLine.class.js'
+import Btn from './js/Btn.class.js'
 
 // Crea un elemento canvas y establece sus dimensiones
 let canvas = new Canvas().canvas
@@ -28,6 +29,17 @@ let pistola = new Joystick(canvas, {
   draggable: true
 });
 
+let btn = new Btn(canvas, {
+  x: 20,
+  y: 20,
+  w: 50,
+  h: 50,
+  font: "16px Arial",
+  label: "x",
+  color: "#ffffff",
+  baseColor: "#000000"
+})
+
 
 let fps = new FPSCounter()
 let bola = new Circle(canvas.width / 2, canvas.height / 2, 10, "#fff000", 4);
@@ -40,13 +52,13 @@ const bloques = [
 let closestPoint = new ClosestPoint(bola, bloques, 100);
 let line = new DrawLine(bola.x, bola.y, 100, "#ffffff", mover.angle)
 
-console.log(bloques);
+  let ctx = canvas.getContext("2d")
+  console.log(ctx);
 // Crea un bucle de animación para dibujar y actualizar el estado del mover
 (function animationLoop() {
   requestAnimationFrame(animationLoop);
 
   // Limpia el canvas
-  let ctx = canvas.getContext("2d")
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   bloques.forEach(element => {
@@ -57,7 +69,7 @@ console.log(bloques);
   });
 
   let b = closestPoint.findClosestArea()
-  if (b != null) b.colorOrImage = "#fff000"
+  if (b != false) closestPoint.collicion(bola.angle, b)
   // Dibuja y actualiza el estado del mover
   mover.draw(ctx);
   pistola.draw(ctx);
@@ -66,27 +78,19 @@ console.log(bloques);
   line.draw(ctx);
   // Dibuja y actualiza el estado de la bola
   bola.draw(ctx);
+  btn.draw(ctx);
   //bola.move(joystick);
   fps.calculateFPS()
   fps.draw(ctx, canvas.width / 2, 50, "#ffffff")
 })();
 
-function launchFullScreen(element) {
-  if (element.requestFullScreen) {
-    element.requestFullScreen();
-  } else if (element.mozRequestFullScreen) {
-    element.mozRequestFullScreen();
-  } else if (element.webkitRequestFullScreen) {
-    element.webkitRequestFullScreen();
+
+btn.func = function ( ) {
+  if (document.documentElement.requestFullScreen) {
+    document.documentElement.requestFullScreen();
+  } else if (document.documentElement.mozRequestFullScreen) {
+    document.documentElement.mozRequestFullScreen();
+  } else if (document.documentElement.webkitRequestFullScreen) {
+    document.documentElement.webkitRequestFullScreen();
   }
 }
-
-window.addEventListener('resize', function () {
-  if (element.requestFullScreen) {
-    element.requestFullScreen();
-  } else if (element.mozRequestFullScreen) {
-    element.mozRequestFullScreen();
-  } else if (element.webkitRequestFullScreen) {
-    element.webkitRequestFullScreen();
-  }
-})

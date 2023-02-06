@@ -56,7 +56,7 @@ export default class Joystick {
     bindEvents(canvas) {
         canvas.addEventListener('touchstart', (e) => this.onPress(e));
         canvas.addEventListener('touchend', (e) => this.onRelease(e));
-        canvas.addEventListener('touchmove', (e) => this.update(e));
+        canvas.addEventListener('touchmove', (e) => this.onPress(e));
     }
 
     /**
@@ -68,11 +68,19 @@ export default class Joystick {
      * @returns {void}
      */
     onPress(e) {
-        const touch = e.touches[0];
-        const x = touch.clientX;
-        const y = touch.clientY;
-        if (x > this.x - this.r && x < this.x + this.r && y > this.y - this.r && y < this.y + this.r) {
-            this.isPressed = true;
+        for (let i = 0; i < e.touches.length; i++) {
+            const touch = e.touches[i];
+            const x = touch.clientX;
+            const y = touch.clientY;
+
+            const distance = Math.sqrt((x - this.x) ** 2 + (y - this.y) ** 2)
+
+            if (distance < this.r) {
+                this.isPressed = true;
+        this.update(x,y)
+        break;
+            } 
+
         }
     }
 
@@ -86,7 +94,6 @@ export default class Joystick {
      */
     onRelease(e) {
         this.isPressed = false;
-        this.angle = 0;
     }
 
     /**
@@ -96,13 +103,11 @@ export default class Joystick {
      * @memberof Joystick
      * @param {TouchEvent} e - Evento de toque generado por el usuario
      */
-    update(e) {
+    update(x,y) {
         if (!this.isPressed) return;
-
-        const touch = e.touches[0];
+        /*const touch = e.touches[this.i];
         const x = touch.clientX;
-        const y = touch.clientY;
-
+        const y = touch.clientY;*/
         const deltaX = x - this.x;
         const deltaY = y - this.y;
         this.angle = Math.atan2(deltaY, deltaX);

@@ -31,7 +31,7 @@ export default class ClosestPoint {
     * Encuentra el area más cercana al punto.
     * @returns {Object|null} La definición del area más cercana o null si la distancia es mayor a @property {pxMin}.
     */
-    findClosestArea() {
+    findClosestArea(pxmin = this.pxMin) {
         let closestArea;
         let minDistance = Infinity;
 
@@ -46,6 +46,16 @@ export default class ClosestPoint {
             }
         });
 
-        return minDistance > this.pxMin ? null : closestArea;
+        return minDistance > pxmin ? false : closestArea;
+    }
+
+    collicion(angle, bloque) {
+        // Detección de colisiones con los bordes del canvas
+        if (this.point.x - this.point.r >= bloque.x || this.point.x + this.point.r <= bloque.w) {
+            bloque.x -=  Math.cos(angle) * this.point.speed;;
+        }
+        if (this.point.y - this.point.r >= bloque.y || this.point.y + this.point.r <= bloque.h) {
+            bloque.y -= Math.sin(angle) * this.point.speed;;
+        }
     }
 }

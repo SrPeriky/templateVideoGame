@@ -15,6 +15,7 @@ export default class Btn {
    * @param {function} func - Función a ejecutarse cuando se haga clic en el botón
    */
     constructor(canvas, option, func) {
+        this.canvas = canvas
         /**
        * Posición x del botón en el canvas
        * @type {number}
@@ -69,7 +70,7 @@ export default class Btn {
          */
         this.func = func;
 
-        canvas.addEventListener('click', (e) => this.onClick(e));
+        this.canvas.addEventListener('click', (e) => this.onClick(e));
     }
 
     /**
@@ -89,8 +90,8 @@ export default class Btn {
     }
 
     onClick(e) {
-        const x = e.clientX - canvas.offsetLeft;
-        const y = e.clientY - canvas.offsetTop;
-        if (x < this.x || x > this.x + this.w || y < this.y || y > this.y + this.w) this.func();
+        const x = e.clientX - this.canvas.offsetLeft;
+        const y = e.clientY - this.canvas.offsetTop;
+        if (!(x < this.x || x > this.x + this.w || y < this.y || y > this.y + this.w)) this.func();
     }
 }

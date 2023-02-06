@@ -53,8 +53,12 @@ export default class FPSCounter {
    * @param {string} [font="16px Arial"] - La fuente que se utilizará para dibujar los FPS.
    */
   draw(ctx, x = 10, y = 20, baseColor = "black", font = "16px Arial") {
-    ctx.fillStyle = baseColor;
+    ctx.fillStyle = "black";
     ctx.font = font;
-    ctx.fillText(`FPS: ${this.fps}`, x, y);
+    ctx.fillText(this.getText(), x, y);
+  }
+
+  getText(){
+    return `FPS: ${this.fps}`
   }
 }
