@@ -9,27 +9,27 @@ import DrawLine from './js/DrawLine.class.js'
 import Btn from './js/Btn.class.js'
 
 // Crea un elemento canvas y establece sus dimensiones
-let canvas = new Canvas().canvas
+let canvas = new Canvas()
 // Crea una instancia de la clase Joystick
-let mover = new Joystick(canvas, {
+let mover = new Joystick(canvas.element, {
   x: (canvas.width * 0.15),
   y: canvas.height - (canvas.height * 0.25),
-  radius: (canvas.height * 0.2),
+  radius: (canvas.height * 0.25),
   stickColor: 'white',
   baseColor: '#80808070',
   draggable: true
 });
 
-let pistola = new Joystick(canvas, {
+let pistola = new Joystick(canvas.element, {
   x: canvas.width * 0.85,
   y: canvas.height * 0.75,
-  radius: (canvas.height * 0.2),
+  radius: (canvas.height * 0.25),
   stickColor: 'white',
   baseColor: '#80808070',
-  draggable: true
+  draggable: false
 });
 
-let btn = new Btn(canvas, {
+let btn = new Btn(canvas.element, {
   x: 20,
   y: 20,
   w: 50,
@@ -50,20 +50,18 @@ const bloques = [
 ];
 
 let closestPoint = new ClosestPoint(bola, bloques, 100);
-let line = new DrawLine(bola.x, bola.y, 100, "#ffffff", mover.angle)
+let line = new DrawLine(bola.x, bola.y, 100, "#ffffff", mover.angle);
 
-  let ctx = canvas.getContext("2d")
-  console.log(ctx);
 // Crea un bucle de animación para dibujar y actualizar el estado del mover
 (function animationLoop() {
   requestAnimationFrame(animationLoop);
 
   // Limpia el canvas
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  canvas.ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   bloques.forEach(element => {
     element.move(mover, 5);
-    element.draw(ctx);
+    element.draw(canvas.ctx);
     element.colorOrImage = "#ffffff"
 
   });
@@ -71,17 +69,17 @@ let line = new DrawLine(bola.x, bola.y, 100, "#ffffff", mover.angle)
   let b = closestPoint.findClosestArea()
   if (b != false) closestPoint.collicion(bola.angle, b)
   // Dibuja y actualiza el estado del mover
-  mover.draw(ctx);
-  pistola.draw(ctx);
+  mover.draw(canvas.ctx);
+  pistola.draw(canvas.ctx);
 
   if (pistola.isPressed) line.angle = pistola.angle
-  line.draw(ctx);
+  line.draw(canvas.ctx);
   // Dibuja y actualiza el estado de la bola
-  bola.draw(ctx);
-  btn.draw(ctx);
+  bola.draw(canvas.ctx);
+  btn.draw(canvas.ctx);
   //bola.move(joystick);
   fps.calculateFPS()
-  fps.draw(ctx, canvas.width / 2, 50, "#ffffff")
+  fps.draw(canvas.ctx, canvas.width / 2, 50, "#ffffff")
 })();
 
 
@@ -94,3 +92,13 @@ btn.func = function ( ) {
     document.documentElement.webkitRequestFullScreen();
   }
 }
+
+window.addEventListener("resize", (e) =>{
+  canvas.updateCanvasSize()
+  mover.x = (canvas.width * 0.15)
+  mover.y = canvas.height - (canvas.height * 0.25)
+  pistola.x = canvas.width * 0.85
+  mover.radius = (canvas.height * 0.25),
+  pistola.radius = (canvas.height * 0.25),
+  pistola.y = canvas.height * 0.75
+});

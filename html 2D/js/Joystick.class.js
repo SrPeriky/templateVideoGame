@@ -40,6 +40,7 @@ export default class Joystick {
         this.isPressed = false;
         this.angle = 0;
         this.w = this.h = this.r * 2;
+        this.t = false
         this.bindEvents(canvas)
     }
 
@@ -55,8 +56,22 @@ export default class Joystick {
      */
     bindEvents(canvas) {
         canvas.addEventListener('touchstart', (e) => this.onPress(e));
-        canvas.addEventListener('touchend', (e) => this.onRelease(e));
+        canvas.addEventListener('touchend', (e) => {
+            this.onPress(e)
+        });
         canvas.addEventListener('touchmove', (e) => this.onPress(e));
+    }
+
+    getXYToush(e, i) {
+        const touch = e.touches[i];
+        const x = touch.clientX;
+        const y = touch.clientY;
+        const distance = Math.sqrt((x - this.x) ** 2 + (y - this.y) ** 2)
+        return {
+            x: x,
+            y: y,
+            distance: distance
+        }
     }
 
     /**
@@ -69,19 +84,15 @@ export default class Joystick {
      */
     onPress(e) {
         for (let i = 0; i < e.touches.length; i++) {
-            const touch = e.touches[i];
-            const x = touch.clientX;
-            const y = touch.clientY;
-
-            const distance = Math.sqrt((x - this.x) ** 2 + (y - this.y) ** 2)
-
-            if (distance < this.r) {
+            const t = this.getXYToush(e, i)
+            this.t = (this.isPressed && t.distance < (this.r*2.5) && t.distance > (this.r))
+            if (t.distance < (this.r) || this.t ) {
                 this.isPressed = true;
-        this.update(x,y)
-        break;
-            } 
-
+                this.update(t.x, t.y)
+                return
+            }
         }
+        this.isPressed = false;
     }
 
     /**
@@ -103,7 +114,7 @@ export default class Joystick {
      * @memberof Joystick
      * @param {TouchEvent} e - Evento de toque generado por el usuario
      */
-    update(x,y) {
+    update(x, y) {
         if (!this.isPressed) return;
         /*const touch = e.touches[this.i];
         const x = touch.clientX;
@@ -121,16 +132,18 @@ export default class Joystick {
      * @param {CanvasRenderingContext2D} ctx - El contexto de renderizado del canvas
      */
     draw(ctx) {
+        const _r = () => (this.t) ? this.r : this.r / 2
+
         ctx.fillStyle = this.baseColor;
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.r, 0, 2 * Math.PI);
         ctx.fill();
         if (this.isPressed) {
             ctx.fillStyle = this.stickColor;
-            const stickX = this.x + Math.cos(this.angle) * (this.r / 2);
-            const stickY = this.y + Math.sin(this.angle) * (this.r / 2);
+            const stickX = this.x + Math.cos(this.angle) * _r();
+            const stickY = this.y + Math.sin(this.angle) * _r();
             ctx.beginPath();
-            ctx.arc(stickX, stickY, this.r / 2, 0, 2 * Math.PI);
+            ctx.arc(stickX, stickY, (this.r / 2), 0, 2 * Math.PI);
             ctx.fill();
         }
     }
